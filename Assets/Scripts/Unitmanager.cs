@@ -15,7 +15,7 @@ public class Unitmanager : MonoBehaviour {
 
 	}
 
-	public void createUnit(int x, int y, Tile tile){
+	public Unit createUnit(int x, int y, Tile tile){
 		Object objectUnit = Instantiate(prefabUnit,new Vector3(x,y,0),Quaternion.identity); //object to convert from later.
 		GameObject unit = objectUnit as GameObject;
 		Unit newUnit = objectUnit as Unit; //reminder that the start function in unit is called after this function ends.
@@ -25,19 +25,11 @@ public class Unitmanager : MonoBehaviour {
 
 		newUnit.controller = controller;
 
-		//EventTrigger trigger = newUnit.GetComponent<EventTrigger>();
-		//EventTrigger.Entry entry = new EventTrigger.Entry();
-		//entry.eventID = EventTriggerType.PointerClick;	//this works
-		//entry.callback.AddListener( (eventData) => { test (); } );
-		//trigger.delegates.Add(entry);
+		return newUnit;
 	}
 
 	public void addUnit(Unit unit){
 		units.Add(unit);
-	}
-
-	public void test(){
-		print ("test");
 	}
 
 	public void removeUnit(Unit unit){

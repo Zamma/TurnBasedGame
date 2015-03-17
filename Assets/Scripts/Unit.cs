@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using AssemblyCSharp;
 
 public class Unit : MonoBehaviour {
+	public Faction faction;
 	public int hp, maxHp, skl, def, atk, dge, lvl, exp, maxMov, mov, vis,minRnge,MaxRnge;
 	public Tile tile;
 	public Controller controller;
