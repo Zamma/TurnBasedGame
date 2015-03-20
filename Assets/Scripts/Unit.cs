@@ -29,6 +29,8 @@ public class Unit : MonoBehaviour {
 		minRnge = 1; //TODO range will probably be moved to an attack skill once skills are added.
 		MaxRnge = 1;
 
+		controller = Grid.controller;
+
 		moveCosts = new TileCosts();
 
 		skills = new List<Skill>();

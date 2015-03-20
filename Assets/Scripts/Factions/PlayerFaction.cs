@@ -18,13 +18,17 @@ namespace AssemblyCSharp
 			controller = c;
 				}
 
-		public void startTurn(){
-			base.startTurn(); //does this work?
+		public override void initiate(){
+			makeUnit(1,1);
+		}
+
+		public override void startTurn(){
 			//controller.enabled = true;
 		}
 
 		public override void endTurn(){
 			Controller.print("end");
+			restoreMove();
 			controller.enabled = false;
 		}
 

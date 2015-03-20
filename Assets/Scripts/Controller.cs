@@ -9,7 +9,6 @@ public class Controller : MonoBehaviour {
 	public GameState gameState;
 	public Unit selectedUnit;
 	public Map map;
-	public Camera camera;
 	//private GameOptions options;
 	private Tile returnTile;
 	public CurrentAction currentAction;
@@ -24,7 +23,8 @@ public class Controller : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		currentAction = GetComponent<CurrentAction>();
-		gameState = GetComponent<GameState>();
+		gameState = Grid.gameState;
+		map = Grid.map;
 	}
 
 	void Update(){
@@ -52,6 +52,7 @@ public class Controller : MonoBehaviour {
 
 	public void clickedOnTile(GameObject tile)
 	{
+		print("turn is: " + Grid.turnManager.turnNumber);
 		if (currentAction.equals("selectedUnit")){
 			deselectUnit();
 		}

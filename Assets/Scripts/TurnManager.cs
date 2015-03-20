@@ -10,9 +10,15 @@ public class TurnManager : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		int turnNumber = 0;
-		GameState state = GetComponent<GameState>(); //hopefull gamestate and turnMangager initialize in the right order.
-		factions = state.factions; 
+		GameState state = Grid.gameState; //hopefull gamestate and turnMangager initialize in the right order.
+		factions = state.factions;
 		active = factions[0];
+	}
+
+	public void startFactions(){
+		foreach (Faction faction in factions){
+			faction.initiate();
+		}
 	}
 
 	void Update() {

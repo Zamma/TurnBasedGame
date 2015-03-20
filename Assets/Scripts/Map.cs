@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using AssemblyCSharp;
@@ -30,11 +30,7 @@ public class Map : MonoBehaviour {
 
 		makeTerrain(chunks);
 
-		for(int i = 0; i<20; i++){
-			int xcor = (int)(Random.value * WIDTH);
-			int ycor = (int)(Random.value * HEIGHT);
-			gameObject.GetComponent<Unitmanager>().createUnit(xcor,ycor,map[xcor,ycor]); //test. not important, can delete.
-		}
+		Grid.turnManager.startFactions();
 	}
 
 	private void makeTerrain(Chunk[] chunks){
@@ -253,10 +249,11 @@ public class Map : MonoBehaviour {
 		if (tile.Equals(map[x,y])) return mov; //success
 
 		int left,right,up,down,final;
-		right = gridDistance(x+1,tile.x,y,tile.y) + (int)costs.costs[map[x+1,y].type];
-		left = gridDistance(x-1,tile.x,y,tile.y) + (int)costs.costs[map[x-1,y].type];
-		up = gridDistance(x,tile.x,y+1,tile.y) + (int)costs.costs[map[x,y+1].type];
-		down = gridDistance(x,tile.x,y-1,tile.y) + (int)costs.costs[map[x,y-1].type];
+		left = right = up = down = 10000; //high value so it wont be chosen
+		if (onMap (x+1,y)) right = gridDistance(x+1,tile.x,y,tile.y) + (int)costs.costs[map[x+1,y].type];
+		if (onMap (x-1,y)) left = gridDistance(x-1,tile.x,y,tile.y) + (int)costs.costs[map[x-1,y].type];
+		if (onMap (x,y+1)) up = gridDistance(x,tile.x,y+1,tile.y) + (int)costs.costs[map[x,y+1].type];
+		if (onMap (x,y-1)) down = gridDistance(x,tile.x,y-1,tile.y) + (int)costs.costs[map[x,y-1].type];
 
 		if(up < down && up < right && up < left){
 			final = searchForTile(x,y+1,tile,mov - (int)costs.costs[map[x,y+1].type],costs);

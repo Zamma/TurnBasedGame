@@ -9,10 +9,11 @@
 //------------------------------------------------------------------------------
 using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace AssemblyCSharp
 {
-		abstract public class Faction
+		abstract public class Faction : MonoBehaviour
 		{
 		public string name;
 		public List<Unit> units;
@@ -22,18 +23,37 @@ namespace AssemblyCSharp
 			units = new List<Unit>();
 				}
 
+		public abstract void initiate();
+
 		public abstract void endTurn();
 
-		public void startTurn(){
-			foreach(Unit unit in units){
-				unit.mov = unit.maxMov;
-			}
-		}
+		public abstract void startTurn();
+			//foreach(Unit unit in units){
+			//	unit.mov = unit.maxMov;
 
 		public void addUnit(Unit unit){
 			unit.faction = this;
 			units.Add(unit);
 		}
+
+		public Unit makeUnit(int x, int y){
+			Tile tile = Grid.map.map[x,y];
+			//UnityEngine.GameObject objectUnit = Instantiate(Loader.aStaticPrefab,new Vector3(x,y,0),Quaternion.identity); //object to convert from later.
+			//GameObject unit = objectUnit as GameObject;
+			Unit newUnit = Instantiate(Grid.prefabLoader.baseUnit,new Vector3(x,y,0),Quaternion.identity) as Unit;//objectUnit as Unit; //reminder that the start function in unit is called after this function ends.
+			addUnit(newUnit);
+			tile.unit = newUnit;
+			newUnit.setTile(tile);
+
+			return newUnit;
+		}
+
+		public void restoreMove(){
+			foreach (Unit unit in units){
+				unit.mov = unit.maxMov;
+			}
+		}
+
 
 		}
 }

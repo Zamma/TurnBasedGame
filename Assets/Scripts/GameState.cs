@@ -20,11 +20,11 @@ public class GameState : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		currentAction = GetComponent<CurrentAction>();
-		map = GetComponent<Map>();
+		currentAction = Grid.controller.currentAction;
+		map = Grid.map;
 		factions = new Faction[NUMFACTIONS];
-		factions[0] = new PlayerFaction(controller);
-		TurnManager manager = GetComponent<TurnManager>();
+		factions[0] = new PlayerFaction(Grid.controller); //TODO make player faction not take an argument
+		TurnManager manager = Grid.turnManager;
 		manager.factions = factions;
 		manager.active = factions[0];
 	}
