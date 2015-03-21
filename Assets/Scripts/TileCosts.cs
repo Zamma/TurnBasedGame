@@ -14,12 +14,23 @@ namespace AssemblyCSharp
 		public class TileCosts
 		{
 		public Hashtable costs;
+
+		public static TileCosts Basic = new TileCosts();
+		public static TileCosts Flat;
+
+				static TileCosts(){
+					Flat = new TileCosts();
+					Flat.costs["Forest"] = 1;
+					Flat.costs["Forest"] = 1;
+					Flat.costs["Water"] = 1;
+				}
+
 				public TileCosts ()
 				{
 					costs = new Hashtable();
 					costs.Add("Grass",1);
 					costs.Add("Forest",2);
-					costs.Add ("Water",1000);
+					costs.Add ("Water",10000);
 					//int test = (int) costs["Water"];
 				}
 

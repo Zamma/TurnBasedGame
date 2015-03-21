@@ -185,7 +185,7 @@ public class Map : MonoBehaviour {
 		int origX = (int)unit.transform.position.x; //original position.
 		int origY = (int)unit.transform.position.y;
 
-		unit.mov = searchForTile(unit.tile.x,unit.tile.y,map[x,y],unit.mov,unit.moveCosts);//options.get(x,y); //reduces the units movement
+		unit.mov = searchForTileInRange(unit.tile.x,unit.tile.y,map[x,y],unit.mov,unit.moveCosts);//options.get(x,y); //reduces the units movement
 		
 		map[origX,origY].unit = null; //remove the unit from the old tile.
 		map[x,y].unit = unit; //and put him on the other tile.
@@ -243,32 +243,50 @@ public class Map : MonoBehaviour {
 		GameOptions options = new GameOptions();
 		return findOptionsPartTwo(x,y,move,options);
 	}
-
+	//returns the distance to the tile
 	public int searchForTile(int x,int y,Tile tile, int mov, TileCosts costs){
-		if (mov < gridDistance(x,tile.x,y,tile.y)) return -100; //failure
+		int max = 20;
+		//print ("doing " + mov);
+		//if (mov < gridDistance(x,tile.x,y,tile.y)) return -100; //failure
+		if (mov >= max) return int.MaxValue; //stop looking after some point
 		if (tile.Equals(map[x,y])) return mov; //success
 
 		int left,right,up,down,final;
-		left = right = up = down = 10000; //high value so it wont be chosen
+		final = left = right = up = down = int.MaxValue; //high value so it wont be chosen
 		if (onMap (x+1,y)) right = gridDistance(x+1,tile.x,y,tile.y) + (int)costs.costs[map[x+1,y].type];
 		if (onMap (x-1,y)) left = gridDistance(x-1,tile.x,y,tile.y) + (int)costs.costs[map[x-1,y].type];
 		if (onMap (x,y+1)) up = gridDistance(x,tile.x,y+1,tile.y) + (int)costs.costs[map[x,y+1].type];
 		if (onMap (x,y-1)) down = gridDistance(x,tile.x,y-1,tile.y) + (int)costs.costs[map[x,y-1].type];
 
-		if(up < down && up < right && up < left){
-			final = searchForTile(x,y+1,tile,mov - (int)costs.costs[map[x,y+1].type],costs);
-			if (final >= 0) return final;
+		while(up < int.MaxValue || down < int.MaxValue || left < int.MaxValue || right < int.MaxValue){
+			if(up < down && up < right && up < left){
+				final = searchForTile(x,y+1,tile,mov + (int)costs.costs[map[x,y+1].type],costs);
+				if (final >= max) up = int.MaxValue; //this condition is so it will check the other options if it deadends
+				else return final;
+			}
+			if (down < left && down < right){
+				final = searchForTile(x,y-1,tile,mov + (int) costs.costs[map[x,y-1].type],costs);
+				if (final >= max) down = int.MaxValue;
+				else return final;
+			}
+			if (left < right){
+				final = searchForTile(x-1,y,tile,mov + (int) costs.costs[map[x-1,y].type],costs);
+				if (final >= max) left = int.MaxValue;
+				else return final;
+			}
+			if (right < int.MaxValue){
+				final = searchForTile(x+1,y,tile,mov + (int) costs.costs[map[x+1,y].type],costs);
+				if (final >= max) right = int.MaxValue;
+				else return final;
+			}
 		}
-		if (down < left && down < right){
-			final = searchForTile(x,y-1,tile,mov - (int) costs.costs[map[x,y-1].type],costs);
-			if (final >= 0) return final;
-		}
-		if (left < right){
-			final = searchForTile(x-1,y,tile,mov - (int) costs.costs[map[x-1,y].type],costs);
-			if (final >= 0) return final;
-		}
-		final = searchForTile(x+1,y,tile,mov - (int) costs.costs[map[x+1,y].type],costs);
 		return final;
+	}
+	//returns the remaining movement
+	public int searchForTileInRange(int x, int y,Tile tile,int mov, TileCosts costs){
+		int final = mov - searchForTile(x,y,tile,0,costs);
+		if (final < 0) return 0;
+		else return final;
 	}
 
 	//returns the tiles surrounding around x and y.

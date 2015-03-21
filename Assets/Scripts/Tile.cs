@@ -92,13 +92,13 @@ public class Tile : MonoBehaviour {
 	}
 
 	public void MakeWater(){
-		moveCost = 1000;
+		moveCost = 10000;
 		type = "Water";
 		changeSprite ("water");
 	}
 
 	public void MakeMountain(){
-		moveCost = 500;
+		moveCost = 5000;
 		type = "Mountain";
 		height = 2;
 		changeSprite ("mountain");

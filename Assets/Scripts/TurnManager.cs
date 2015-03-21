@@ -32,7 +32,7 @@ public class TurnManager : MonoBehaviour {
 		turnNumber++;
 		active.endTurn();
 		active = factions[turnNumber % factions.Length];
-		print (turnNumber % factions.Length);
+		print ("now playing faction number: " + turnNumber % factions.Length);
 		active.startTurn();
 	}
 }

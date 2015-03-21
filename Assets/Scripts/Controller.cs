@@ -33,8 +33,12 @@ public class Controller : MonoBehaviour {
 
 	public void clickedOnUnit(GameObject gameobject)
 	{
+		Unit unit = gameobject.GetComponent<Unit>();
+		//if either the unit is not under your control or it is not on your turn
+		if (!unit.faction.Equals(Grid.turnManager.factions[0]) || !Grid.turnManager.factions[0].Equals(Grid.turnManager.active)){
+			return;
+		}
 		if (currentAction.equals("neutral") || currentAction.equals("selectedUnit")){
-			Unit unit = gameobject.GetComponent<Unit>();
 			selectUnit(unit);
 		}
 	}
@@ -52,7 +56,6 @@ public class Controller : MonoBehaviour {
 
 	public void clickedOnTile(GameObject tile)
 	{
-		print("turn is: " + Grid.turnManager.turnNumber);
 		if (currentAction.equals("selectedUnit")){
 			deselectUnit();
 		}
@@ -97,11 +100,11 @@ public class Controller : MonoBehaviour {
 		}
 	}
 
-	public void battle(Unit attacker,Unit attackee){
+	public static void battle(Unit attacker,Unit attackee){
 		print ("battle!");
-		gameState.battle = new BattleEvent(attacker,attackee,map);
-		gameState.battle.battle();
-		gameState.battle = null;
+		Grid.gameState.battle = new BattleEvent(attacker,attackee,Grid.map);
+		Grid.gameState.battle.battle();
+		Grid.gameState.battle = null;
 	}
 
 	//select a unit, whether one was selected before or not.

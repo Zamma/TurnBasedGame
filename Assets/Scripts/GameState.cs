@@ -7,7 +7,7 @@ using System.Collections.Generic;
 
 public class GameState : MonoBehaviour {
 
-	public static int NUMFACTIONS = 1;
+	public static int NUMFACTIONS = 2;
 
 	public Controller controller;
 	public CurrentAction currentAction;
@@ -24,6 +24,7 @@ public class GameState : MonoBehaviour {
 		map = Grid.map;
 		factions = new Faction[NUMFACTIONS];
 		factions[0] = new PlayerFaction(Grid.controller); //TODO make player faction not take an argument
+		factions[1] = new AIFaction();
 		TurnManager manager = Grid.turnManager;
 		manager.factions = factions;
 		manager.active = factions[0];

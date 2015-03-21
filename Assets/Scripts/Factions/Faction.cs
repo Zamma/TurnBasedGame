@@ -13,7 +13,7 @@ using UnityEngine;
 
 namespace AssemblyCSharp
 {
-		abstract public class Faction : MonoBehaviour
+		abstract public class Faction
 		{
 		public string name;
 		public List<Unit> units;
@@ -36,11 +36,15 @@ namespace AssemblyCSharp
 			units.Add(unit);
 		}
 
+		public void removeUnit(Unit unit){
+			units.Remove(unit);
+		}
+
 		public Unit makeUnit(int x, int y){
 			Tile tile = Grid.map.map[x,y];
 			//UnityEngine.GameObject objectUnit = Instantiate(Loader.aStaticPrefab,new Vector3(x,y,0),Quaternion.identity); //object to convert from later.
 			//GameObject unit = objectUnit as GameObject;
-			Unit newUnit = Instantiate(Grid.prefabLoader.baseUnit,new Vector3(x,y,0),Quaternion.identity) as Unit;//objectUnit as Unit; //reminder that the start function in unit is called after this function ends.
+			Unit newUnit = MonoBehaviour.Instantiate(Grid.prefabLoader.baseUnit,new Vector3(x,y,0),Quaternion.identity) as Unit;//objectUnit as Unit; //reminder that the start function in unit is called after this function ends.
 			addUnit(newUnit);
 			tile.unit = newUnit;
 			newUnit.setTile(tile);

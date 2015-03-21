@@ -91,6 +91,7 @@ public class Unit : MonoBehaviour {
 
 	public void die(){
 		print("unit died");
+		faction.removeUnit(this);
 		Destroy (this.gameObject);
 	}
 
