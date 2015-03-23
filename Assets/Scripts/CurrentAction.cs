@@ -18,14 +18,14 @@ public class CurrentAction : MonoBehaviour {
 	}
 
 	public void set(string newaction){
-		if (!updated){
+		//if (!updated){
 			action = newaction;
 			updated = true;
-		}
+		//}
 	}
 
 	public bool equals(string check){
-		if (action.Equals(check) && !updated){
+		if (action.Equals(check) ){//&& !updated){
 			return true;
 		}
 		else {

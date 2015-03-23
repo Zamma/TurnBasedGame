@@ -19,6 +19,7 @@ public class TurnManager : MonoBehaviour {
 		foreach (Faction faction in factions){
 			faction.initiate();
 		}
+		factions[0].startTurn();
 	}
 
 	void Update() {
@@ -32,7 +33,6 @@ public class TurnManager : MonoBehaviour {
 		turnNumber++;
 		active.endTurn();
 		active = factions[turnNumber % factions.Length];
-		print ("now playing faction number: " + turnNumber % factions.Length);
 		active.startTurn();
 	}
 }

@@ -29,8 +29,13 @@ public class Map : MonoBehaviour {
 		}
 
 		makeTerrain(chunks);
+	}
 
+	void Update(){
+		print ("starting");
+		makeAllFog();
 		Grid.turnManager.startFactions();
+		this.enabled = false;
 	}
 
 	private void makeTerrain(Chunk[] chunks){
@@ -44,6 +49,7 @@ public class Map : MonoBehaviour {
 			for (int x=0;x<WIDTH;x++){ //for each tile
 
 				map[x,y] = Instantiate(tile,new Vector3(x,y,0),Quaternion.identity) as Tile; //make the tile
+				map[x,y].transform.parent = transform;
 				map[x,y].controller = controller;
 				map[x,y].setPosition(x,y); //gives the tile information of its posistion.
 				grass = 0; water = 0; forest = 0;
@@ -314,6 +320,19 @@ public class Map : MonoBehaviour {
 		tiles = gtim (x,y,costs,distance,options,tiles);
 		return tiles;
 	}
+	//unoptimized method to get tiles in a range which excludes tiles from a lower bound.
+	//currently excludes the lower radius based on tile distance rather than how much movement it took to get there.
+	//I think that's OK?
+	public List<Tile> getTilesInRange(int x,int y,TileCosts costs,int lower,int upper){
+		List<Tile> tiles = getTilesInMovement(x,y,costs,upper);
+		List<Tile> matchedTiles = new List<Tile>();
+		foreach(Tile tile in tiles){
+			if (gridDistance(tile.x,x,tile.y,y) >= lower){
+				matchedTiles.Add(tile);
+			}
+		}
+		return matchedTiles;
+	}
 	//method called by wrapper getTilesInMovement
 	private List<Tile> gtim(int x,int y,TileCosts costs, int distance, GameOptions explored,List<Tile> tiles){
 		if (distance < 0) return new List<Tile>();
@@ -367,6 +386,14 @@ public class Map : MonoBehaviour {
 	public void highlight(int x, int y, int lowerRadius,int higherRadius, Color color){
 		foreach(Tile tile in getTilesFromCircle(x,y,lowerRadius,higherRadius)){
 			tile.highlight(color);
+		}
+	}
+	//makes all tiles fogged
+	public void makeAllFog(){
+		for(int i = 0;i<WIDTH;i++){
+			for(int j = 0;j<HEIGHT;j++){
+				map[i,j].makeFog();
+			}
 		}
 	}
 	

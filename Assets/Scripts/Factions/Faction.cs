@@ -17,10 +17,12 @@ namespace AssemblyCSharp
 		{
 		public string name;
 		public List<Unit> units;
+		public Color color;
 
 				public Faction ()
 				{
 			units = new List<Unit>();
+			color = Highlight.WHITE;
 				}
 
 		public abstract void initiate();
@@ -32,7 +34,7 @@ namespace AssemblyCSharp
 			//	unit.mov = unit.maxMov;
 
 		public void addUnit(Unit unit){
-			unit.faction = this;
+			unit.setFaction(this);
 			units.Add(unit);
 		}
 
@@ -55,6 +57,17 @@ namespace AssemblyCSharp
 		public void restoreMove(){
 			foreach (Unit unit in units){
 				unit.mov = unit.maxMov;
+			}
+		}
+		//checks that all the units in unit exist and are alive
+		public void checkIntegrity(){
+			//units.RemoveAll(null);
+			List<Unit> deadUnits = new List<Unit>();
+			foreach(Unit unit in units){
+				if (unit.isDead()) deadUnits.Add(unit);
+			}
+			foreach(Unit unit in deadUnits){
+				units.Remove(unit);
 			}
 		}
 

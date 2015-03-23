@@ -47,15 +47,23 @@
   </ItemGroup>
   <ItemGroup>
      <Compile Include="Assets\Scripts\ActionPanel.cs" />
+     <Compile Include="Assets\Scripts\Actions\Action.cs" />
+     <Compile Include="Assets\Scripts\Actions\EndTurn.cs" />
+     <Compile Include="Assets\Scripts\Actions\NormalAttack.cs" />
      <Compile Include="Assets\Scripts\CameraDrag.cs" />
      <Compile Include="Assets\Scripts\Controller.cs" />
      <Compile Include="Assets\Scripts\CurrentAction.cs" />
      <Compile Include="Assets\Scripts\Events\BattleEvent.cs" />
-     <Compile Include="Assets\Scripts\Faction.cs" />
+     <Compile Include="Assets\Scripts\Factions\AIFaction.cs" />
+     <Compile Include="Assets\Scripts\Factions\Faction.cs" />
+     <Compile Include="Assets\Scripts\Factions\PlayerFaction.cs" />
      <Compile Include="Assets\Scripts\GameOptions.cs" />
      <Compile Include="Assets\Scripts\GameState.cs" />
+     <Compile Include="Assets\Scripts\Grid.cs" />
+     <Compile Include="Assets\Scripts\Highlight.cs" />
      <Compile Include="Assets\Scripts\LeftButtonEvent.cs" />
      <Compile Include="Assets\Scripts\Map.cs" />
+     <Compile Include="Assets\Scripts\PrefabLoader.cs" />
      <Compile Include="Assets\Scripts\RightButtonEvent.cs" />
      <Compile Include="Assets\Scripts\Skills\DoubleExpSkill.cs" />
      <Compile Include="Assets\Scripts\Skills\FirstStrike.cs" />
@@ -64,6 +72,8 @@
      <Compile Include="Assets\Scripts\Tile.cs" />
      <Compile Include="Assets\Scripts\TileCosts.cs" />
      <Compile Include="Assets\Scripts\TurnManager.cs" />
+     <Compile Include="Assets\Scripts\UI\ActionButton.cs" />
+     <Compile Include="Assets\Scripts\UI\GUIlist.cs" />
      <Compile Include="Assets\Scripts\Unit.cs" />
      <Compile Include="Assets\Scripts\Unitmanager.cs" />
  <Reference Include="UnityEngine.UI">

@@ -1,11 +1,10 @@
 ﻿using UnityEngine;
 using System.Collections;
+using AssemblyCSharp;
 
 public class Tile : MonoBehaviour {
-
-	public static Color MOVEHIGHLIGHT = new Color(.09f,.180f,.220f);
-	public static Color WHITE = new Color(255f,255f,255f);
-	public static Color ATTACKHIGHLIGHT = new Color(255f,0f,0f);
+	
+	public Highlight shade;
 	public int moveCost = 1,x,y;
 	public string type = "default";
 	public bool visible = true;
@@ -15,7 +14,10 @@ public class Tile : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		highlight (new Color( 255f, 255f, 255f));
+		shade = Instantiate(Grid.prefabLoader.highlight,new Vector3(x,y,0),Quaternion.identity) as Highlight;
+		shade.transform.parent = transform;
+		highlight (Highlight.CLEAR);
+		makeFog();
 	}
 
 	public void setPosition(int xcor, int ycor)
@@ -35,18 +37,15 @@ public class Tile : MonoBehaviour {
 	}
 
 	public void highlight(Color color){
-		SpriteRenderer sp = gameObject.GetComponent<SpriteRenderer>();
-		sp.color = color;
+		shade.setColor(color);
 	}
 
 	public void clearHighlight(){
-		Color color = WHITE;
-		highlight (color);
+		highlight (Highlight.CLEAR);
 	}
 
 	public Color getHighlight(){
-		Color color = gameObject.GetComponent<SpriteRenderer>().color;
-		return color;
+		return shade.getColor();
 	}
 
 	public bool white(){
@@ -59,9 +58,19 @@ public class Tile : MonoBehaviour {
 		}
 	}
 
+	public void makeFog(){
+		highlight(Highlight.FOG);
+		if (unit != null) unit.makeInvisible();
+	}
+
+	public void reveal(){
+		shade.setColor(Highlight.CLEAR);
+		if (unit != null) unit.makeVisible();
+	}
+
 	public bool moveHighlighted(){
 		Color color = getHighlight();
-		if (color.Equals (MOVEHIGHLIGHT)){
+		if (color.Equals (Highlight.MOVEHIGHLIGHT)){
 			return true;
 		}
 		else {
@@ -71,7 +80,7 @@ public class Tile : MonoBehaviour {
 	
 	public bool AttackHighlighted(){
 		Color color = getHighlight();
-		if (color.Equals (ATTACKHIGHLIGHT)){
+		if (color.Equals (Highlight.ATTACKHIGHLIGHT)){
 			return true;
 		}
 		else {

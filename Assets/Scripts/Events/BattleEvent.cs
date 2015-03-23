@@ -11,6 +11,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using AssemblyCSharp;
+using UnityEngine;
 /* a battle does the following:
  * resolves initial effects (who goes first, what buffs are applied, etc...)
  * has the attacker swing at the attacked unit
@@ -74,8 +75,8 @@ namespace AssemblyCSharp
 
 			public bool swing(Unit one, Unit two){
 			int hitChance = one.skl - two.dge;
-			Random random = new Random();
-			int hitFactor = random.Next (0,4); //0-4 (although it's inclusive so on rare occasions it could be 5).
+			int hitFactor = Mathf.FloorToInt(UnityEngine.Random.value*5); //0-4
+			MonoBehaviour.print(hitFactor);
 			//print ("has a " + hitChance*20 + "% chance to hit");
 			if (hitChance - hitFactor <= 0){
 				//print ("missed");

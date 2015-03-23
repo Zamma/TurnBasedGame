@@ -8,6 +8,7 @@ public class Controller : MonoBehaviour {
 
 	public GameState gameState;
 	public Unit selectedUnit;
+	public Action selectedAction;
 	public Map map;
 	//private GameOptions options;
 	private Tile returnTile;
@@ -35,7 +36,7 @@ public class Controller : MonoBehaviour {
 	{
 		Unit unit = gameobject.GetComponent<Unit>();
 		//if either the unit is not under your control or it is not on your turn
-		if (!unit.faction.Equals(Grid.turnManager.factions[0]) || !Grid.turnManager.factions[0].Equals(Grid.turnManager.active)){
+		if (unit.mov == 0 || !unit.faction.Equals(Grid.turnManager.factions[0]) || !Grid.turnManager.factions[0].Equals(Grid.turnManager.active)){
 			return;
 		}
 		if (currentAction.equals("neutral") || currentAction.equals("selectedUnit")){
@@ -45,17 +46,18 @@ public class Controller : MonoBehaviour {
 
 	public void rightClickedOnUnit(GameObject gameObject){
 		Unit unit = gameObject.GetComponent<Unit>();
-		 if (currentAction.equals("looking") && unit.tile.AttackHighlighted()){
-			Unit attacker = selectedUnit;
-			map.highlight(attacker.tile.x,attacker.tile.y,attacker.minRnge,attacker.MaxRnge,Tile.WHITE);
+		 if (currentAction.equals("action") && unit.tile.AttackHighlighted()){
+			/*Unit attacker = selectedUnit;
+			map.highlight(attacker.tile.x,attacker.tile.y,attacker.minRnge,attacker.maxRnge,Highlight.CLEAR);
 			selectedUnit.mov = 0;
 			battle(attacker,unit);
-			deselectUnit();
+			deselectUnit();*/
 		}
 	}
 
-	public void clickedOnTile(GameObject tile)
+	public void clickedOnTile(GameObject t)
 	{
+		Tile tile = t.GetComponent<Tile>();
 		if (currentAction.equals("selectedUnit")){
 			deselectUnit();
 		}
@@ -63,11 +65,34 @@ public class Controller : MonoBehaviour {
 			selectedUnit.deleteActionsMenu();
 			returnUnitToTile();
 		}
-		else if (currentAction.equals ("looking")){
+		else if (currentAction.equals ("action")){
+			selectedAction.clickedTile(tile);
+			/*Unit unit = selectedUnit;//to make the next line shorter.
+			map.highlight(unit.tile.x,unit.tile.y,unit.minRnge,unit.maxRnge,Highlight.CLEAR);
+			selectedUnit.makeActionsMenu();
+			currentAction.set("movedUnit");*/
+		}
+	}
+
+	public void startingAction(Action action){
+		currentAction.set ("action");
+		selectedAction = action;
+		selectedAction.display();
+		if (selectedUnit != null) selectedUnit.deleteActionsMenu();
+	}
+	//ended the action. condition is either cancel or finish.
+	public void endAction(string condition){
+		print ("calledEnd");
+		if (condition.Equals("cancel")){
 			Unit unit = selectedUnit;//to make the next line shorter.
-			map.highlight(unit.tile.x,unit.tile.y,unit.minRnge,unit.MaxRnge,Tile.WHITE);
+			map.highlight(unit.tile.x,unit.tile.y,unit.minRnge,unit.maxRnge,Highlight.CLEAR);
 			selectedUnit.makeActionsMenu();
 			currentAction.set("movedUnit");
+		}
+		else if (condition.Equals("finish")){
+			print ("finished");
+			currentAction.set ("neutral");
+			deselectUnit();
 		}
 	}
 	//the unit ends its movement
@@ -75,11 +100,14 @@ public class Controller : MonoBehaviour {
 		unit.mov = 0;
 		deselectUnit();
 		unit.deleteActionsMenu();
+		if (unit.faction.Equals(Grid.turnManager.factions[0])){
+			unit.refreshVision();
+		}
 	}
-
+	//This can be deleted once the old menu is replaced
 	public void lookForAttack(Unit unit){
-		currentAction.set("looking");
-		map.highlight(unit.tile.x,unit.tile.y,unit.minRnge,unit.MaxRnge,Tile.ATTACKHIGHLIGHT);
+		currentAction.set("action");
+		map.highlight(unit.tile.x,unit.tile.y,unit.minRnge,unit.maxRnge,Highlight.ATTACKHIGHLIGHT);
 		unit.deleteActionsMenu();
 	}
 
@@ -91,13 +119,21 @@ public class Controller : MonoBehaviour {
 			selectedUnit.makeActionsMenu();
 			currentAction.set ("movedUnit");
 		}
-		else if (currentAction.equals("looking") && tile.hasUnit() && tile.AttackHighlighted()){
-			Unit unit = selectedUnit;
-			map.highlight(unit.tile.x,unit.tile.y,unit.minRnge,unit.MaxRnge,Tile.WHITE);
-			selectedUnit.mov = 0;
-			battle(unit,tile.unit);
-			deselectUnit();
+		else if (currentAction.equals("action")){
+			selectedAction.rightClickedTile(tile);
 		}
+		/*
+		else if (currentAction.equals("action") && tile.hasUnit() && tile.AttackHighlighted()){
+			Unit unit = selectedUnit;
+			//map.highlight(unit.tile.x,unit.tile.y,unit.minRnge,unit.maxRnge,Highlight.CLEAR);
+			//selectedUnit.mov = 0;
+			battle(unit,tile.unit);
+			if(unit != null && !unit.isDead()){
+				endUnitTurn(unit);
+			}
+			//deselectUnit();
+		}
+		*/
 	}
 
 	public static void battle(Unit attacker,Unit attackee){
@@ -116,7 +152,7 @@ public class Controller : MonoBehaviour {
 
 		List<Tile> tiles = map.getTilesInMovement(unit.tile.x,unit.tile.y,unit.moveCosts,unit.mov);
 		foreach(Tile tile in tiles){
-			tile.highlight(Tile.MOVEHIGHLIGHT);
+			tile.highlight(Highlight.MOVEHIGHLIGHT);
 		}
 		//options = map.findOptions(selectedUnit.tile.x,selectedUnit.tile.y,selectedUnit.mov);
 		

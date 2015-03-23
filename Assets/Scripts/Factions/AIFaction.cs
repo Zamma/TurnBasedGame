@@ -20,7 +20,7 @@ namespace AssemblyCSharp
 			public static Tile playerStart;
 				public AIFaction ()
 				{
-					
+			color = Highlight.ENEMY;	
 				}
 
 
@@ -29,12 +29,15 @@ namespace AssemblyCSharp
 				makeUnit(Map.HEIGHT-1,Map.HEIGHT -1);
 				makeUnit (10,10);
 				playerStart = Grid.map.map[Map.WIDTH/2,Map.WIDTH/2];
+			Grid.map.makeAllFog();
 			}
 
 			public override void startTurn(){
+			checkIntegrity();
 				foreach (Unit unit in units){
 					doBestOption(unit);
 				}
+			checkIntegrity();
 			Grid.turnManager.nextTurn();
 			}
 
@@ -54,7 +57,7 @@ namespace AssemblyCSharp
 						bestValue = currentValue;
 					}
 				}
-				MonoBehaviour.print("now moving to: "+ bestMove.x + ", " + bestMove.y + ". Value was: " + bestValue);
+				//MonoBehaviour.print("now moving to: "+ bestMove.x + ", " + bestMove.y + ". Value was: " + bestValue);
 				Grid.map.moveUnit(unit,bestMove.x,bestMove.y);
 				doBestAction(unit);
 			}
@@ -75,16 +78,16 @@ namespace AssemblyCSharp
 
 			private float attackValue(Tile tile, Unit unit){
 			float value = 0f;
-			List<Tile> tiles = Grid.map.getTilesInMovement(tile.x,tile.y,TileCosts.Flat,unit.MaxRnge);
+			List<Tile> tiles = Grid.map.getTilesInMovement(tile.x,tile.y,TileCosts.Flat,unit.maxRnge);
 			foreach(Tile otherTile in tiles){
-				if (otherTile.hasUnit() && !otherTile.unit.Equals(unit)) value = 1f*ATTACKWEIGHT; //this should be more detailed later.
+				if (otherTile.hasUnit() && !otherTile.unit.faction.Equals(this)) value = 1f*ATTACKWEIGHT; //this should be more detailed later.
 			}
 			return value;
 			}
 			//takes a tile as the start point and a unit and returns all the enemy units in that units range
 			private List<Unit> getUnitsInRange(Tile tile, Unit unit){
 			List<Unit> units = new List<Unit>();
-			List<Tile> tiles = Grid.map.getTilesInMovement(tile.x,tile.y,TileCosts.Flat,unit.MaxRnge);
+			List<Tile> tiles = Grid.map.getTilesInMovement(tile.x,tile.y,TileCosts.Flat,unit.maxRnge);
 			foreach(Tile otherTile in tiles){
 				if (otherTile.hasUnit() && otherTile.unit.faction != this) units.Add(otherTile.unit); //this should be more detailed later.
 			}

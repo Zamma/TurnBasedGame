@@ -1,13 +1,16 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\Map.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\Controller.cs">
     <Files>
-      <File FileName="Assets\Scripts\TurnManager.cs" Line="4" Column="22" />
-      <File FileName="Assets\Scripts\Controller.cs" Line="136" Column="3" />
-      <File FileName="Assets\Scripts\Tile.cs" Line="43" Column="23" />
-      <File FileName="Assets\TileCosts.cs" Line="26" Column="26" />
-      <File FileName="Assets\Scripts\Map.cs" Line="301" Column="51" />
-      <File FileName="Assets\Scripts\Unit.cs" Line="26" Column="11" />
+      <File FileName="Assets\Scripts\UI\GUIlist.cs" Line="14" Column="28" />
+      <File FileName="Assets\Scripts\UI\ActionButton.cs" Line="12" Column="34" />
+      <File FileName="Assets\Scripts\Actions\Action.cs" Line="26" Column="1" />
+      <File FileName="Assets\Scripts\Unit.cs" Line="68" Column="57" />
+      <File FileName="Assets\Scripts\Controller.cs" Line="121" Column="4" />
+      <File FileName="Assets\Scripts\Actions\EndTurn.cs" Line="20" Column="3" />
+      <File FileName="Assets\Scripts\Actions\NormalAttack.cs" Line="46" Column="49" />
+      <File FileName="Assets\Scripts\Map.cs" Line="334" Column="23" />
+      <File FileName="Assets\Scripts\Tile.cs" Line="37" Column="3" />
     </Files>
     <Pads>
       <Pad Id="ClassPad">

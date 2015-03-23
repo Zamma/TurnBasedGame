@@ -16,17 +16,18 @@ namespace AssemblyCSharp
 {
 		public class PlusAttackSkill : Skill {
 		public int atkIncrease;
-				public PlusAttackSkill (GameState state, GameObject gameObject, int startingValue) : base(state,gameObject)
+				public PlusAttackSkill (Unit u, int startingValue) : base(u)
 				{
 					atkIncrease = startingValue;
 					activate ("start");
 				}
 
-				public void activate(string activator){
+				public override void activate(string activator){
+			MonoBehaviour.print ("adding PlusAttackSkill");
 					unit.atk += atkIncrease;
 				}
 
-				public void destroy(string condition){
+				public override void destroy(string condition){
 					unit.atk -= atkIncrease;
 				}
 		}

@@ -14,16 +14,20 @@ namespace AssemblyCSharp
 {
 	public class DoubleExpSkill : Skill
 	{
-			public DoubleExpSkill (GameState state, GameObject gameObject) : base(state,gameObject)
+			public DoubleExpSkill (Unit u) : base(u)
 			{
 			activates.Add ("gainExp");
 			}
 
 		//will be called with the value of the amount of exp gained.
-		public void activate(string activator){
+		public override void activate(string activator){
 			int exp = int.Parse(activator);
 
 			unit.exp += exp; //only once since the exp gain already happens once.
+		}
+
+		public override void destroy(string condition){
+
 		}
 	}
 }

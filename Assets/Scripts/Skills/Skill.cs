@@ -22,18 +22,18 @@ using UnityEngine;
 
 namespace AssemblyCSharp
 {
-		public class Skill
+		abstract public class Skill
 		{
 		public Unit unit;
 		public List<string> activates;
 		public GameState gameState;
 
-		public Skill (GameState state,GameObject gameObject)
+		public Skill (Unit u)
 		{
-			unit = gameObject.GetComponent<Unit>();
+			unit = u;
 			unit.addSkill(this);
 			activates = new List<string>();
-			gameState = state;
+			gameState = Grid.gameState;
 		}
 
 		public bool checkActivate(string activator){
@@ -60,14 +60,9 @@ namespace AssemblyCSharp
 			else return null;
 		}
 
-		public void activate(string activator){
-			//do stuff
-		}
+		public abstract void activate(string activator);
 
-		public void destroy(string condition){
-
-
-		}
+		public abstract void destroy(string condition);
 
 		//**************************************************************STATIC METHODS**********************************************************************
 

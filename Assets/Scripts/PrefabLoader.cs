@@ -7,4 +7,7 @@ using System.Collections;
 public class PrefabLoader : MonoBehaviour {
 	public Unit baseUnit;
 	public Tile baseTile;
+	public Highlight highlight;
+	public ActionButton actionButton;
+	public GUIlist guiList;
 }

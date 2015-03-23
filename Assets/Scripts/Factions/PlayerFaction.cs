@@ -8,6 +8,8 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 using System;
+using UnityEngine;
+
 namespace AssemblyCSharp
 {
 		public class PlayerFaction : Faction
@@ -20,9 +22,15 @@ namespace AssemblyCSharp
 
 		public override void initiate(){
 			makeUnit(1,1);
+			//new WaitForSeconds(1);
+			foreach(Unit unit in units){
+				new PlusAttackSkill(unit,5);
+				new FirstStrike(unit);
+			}
 		}
 
 		public override void startTurn(){
+			refreshAllVision();
 			//controller.enabled = true;
 		}
 
@@ -30,6 +38,17 @@ namespace AssemblyCSharp
 			Controller.print("end");
 			restoreMove();
 			controller.enabled = false;
+			foreach(Unit unit in units){
+				unit.printSkills();
+			}
+			Grid.map.makeAllFog();
+			refreshAllVision();
+		}
+
+		public void refreshAllVision(){
+			foreach(Unit unit in units){
+				unit.refreshVision();
+			}
 		}
 
 
