@@ -18,6 +18,7 @@ namespace AssemblyCSharp
 			public static float POSITIONWEIGHT = 1f;
 			public static float ATTACKWEIGHT = 100f;
 			public static Tile playerStart;
+			private GameOptions distanceToPlayer;
 				public AIFaction ()
 				{
 			color = Highlight.ENEMY;	
@@ -25,12 +26,17 @@ namespace AssemblyCSharp
 
 
 			public override void initiate(){
-				makeUnit(0,0);
-				makeUnit(Map.HEIGHT-1,Map.HEIGHT -1);
-				makeUnit (Map.HEIGHT-1,0);
-				makeUnit (0,Map.HEIGHT-1);
+				//makeUnit(0,0);
+				//makeUnit(Map.HEIGHT-1,Map.HEIGHT -1);
+				//makeUnit (Map.HEIGHT-1,0);
+				//makeUnit (0,Map.HEIGHT-1);
 				playerStart = Grid.map.map[Map.WIDTH/2,Map.WIDTH/2];
-			Grid.map.makeAllFog();
+				distanceToPlayer = Grid.map.findOptions(playerStart.x,playerStart.y,0);
+			distanceToPlayer.printMap();
+				foreach (Tile tile in distanceToPlayer.furthestTiles){
+					makeUnit(tile.x,tile.y);
+				}
+				Grid.map.makeAllFog();
 			}
 
 			public override void startTurn(){
@@ -72,7 +78,7 @@ namespace AssemblyCSharp
 			//how close to the center is it.
 			private float positionValue(Tile tile,Unit unit){
 			float value = 0f;
-			value += (float) (Map.HEIGHT + Map.WIDTH - Grid.map.gridDistance(tile.x,playerStart.x,tile.y,playerStart.y));//Grid.map.searchForTile(tile.x,tile.y,playerStart,0,unit.moveCosts);
+			value += (float) (Map.HEIGHT + Map.WIDTH - distanceToPlayer.get(tile.x,tile.y));//Grid.map.searchForTile(tile.x,tile.y,playerStart,0,unit.moveCosts);
 			value *= POSITIONWEIGHT;
 			return value;
 			}

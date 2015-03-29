@@ -10,16 +10,25 @@
 using System;
 using AssemblyCSharp;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace AssemblyCSharp
 {
 		public class GameOptions
 		{
 			public  int[,] options;
-
+			public List<Tile> furthestTiles;
+			private int highest;
 			public GameOptions ()
 			{
 				options = new int[Map.WIDTH,Map.HEIGHT];
+				furthestTiles = new List<Tile>();
+				highest = -1;
+			for (int i = 0; i<Map.WIDTH;i++){
+				for (int j = 0; j<Map.HEIGHT;j++){
+					set (i,j,-1);
+				}
+			}
 			}
 
 			public int get(int x, int y){
@@ -27,7 +36,47 @@ namespace AssemblyCSharp
 			}
 
 		public void set(int x, int y, int move){
+			/*
+			if (move > highest){
+				furthestTiles = new List<Tile>();
+				furthestTiles.Add(Grid.map.map[x,y]);
+				highest = move;
+			}
+			else if (move == highest){
+				furthestTiles.Add(Grid.map.map[x,y]);
+			}
+			else if (options[x,y] != -1){
+				furthestTiles.Remove(Grid.map.map[x,y]);
+			}
+			*/
 			options[x,y] = move;
+		}
+			
+		public void finalize(){
+			int highest = 0;
+			//find the highest
+			for (int y = 0;y<Map.HEIGHT;y++){
+				for (int x = 0;x<Map.WIDTH;x++){
+					if (get (x,y) > highest) highest = get (x,y);
+				}
+			}
+
+			for (int y = 0;y<Map.HEIGHT;y++){
+				for (int x = 0;x<Map.WIDTH;x++){
+					if (get (x,y) == highest) furthestTiles.Add(Grid.map.map[x,y]);
+				}
+			}
+		}
+
+		public void printMap(){
+			string line;
+			for (int y = 0;y<Map.HEIGHT;y++){
+				line = "";
+				for (int x = 0;x<Map.WIDTH;x++){
+					line += get (x,y) + ", ";
+				}
+				MonoBehaviour.print (line);
+			}
 		}
 
 		}

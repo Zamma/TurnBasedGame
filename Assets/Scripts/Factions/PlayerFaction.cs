@@ -25,9 +25,9 @@ namespace AssemblyCSharp
 				}
 
 		public override void initiate(){
-			makeUnit(10,10);
-			makeUnit (11,10);
-			//new WaitForSeconds(1);
+			makeUnit(Map.WIDTH/2,Map.HEIGHT/2);
+			makeUnit (Map.WIDTH/2 + 1,Map.HEIGHT/2);
+
 			foreach(Unit unit in units){
 				new PlusAttackSkill(unit,5);
 				new FirstStrike(unit);

@@ -55,10 +55,10 @@ public class Map : MonoBehaviour {
 		for (int y = 0; y<HEIGHT ; y+=BIOMESEPERATION){
 			for (int x = 0; x<WIDTH ; x+=BIOMESEPERATION){
 				r = UnityEngine.Random.value*(water+grass+forest);
-				if (x == WIDTH/2 && y == HEIGHT/2) {biomes.Add(new GrassBiome(x,y));print ("biome at: " + x + ", " + y + " is grass");} ///center of the map.
-				else if (r < water){water -= 1; biomes.Add(new WaterBiome(x,y));print ("biome at: " + x + ", " + y + " is water");}
-				else if (r<(water + grass)) {grass -= 1;biomes.Add(new GrassBiome(x,y)); print ("biome at: " + x + ", " + y + " is grass");}
-				else if (r<(water + grass + forest)) {forest -= 1;biomes.Add(new ForestBiome(x,y));print ("biome at: " + x + ", " + y + " is forest");}
+				if (x == WIDTH/2 && y == HEIGHT/2) {biomes.Add(new GrassBiome(x,y));} ///center of the map.
+				else if (r < water){water -= 1; biomes.Add(new WaterBiome(x,y));}
+				else if (r<(water + grass)) {grass -= 1;biomes.Add(new GrassBiome(x,y));}
+				else if (r<(water + grass + forest)) {forest -= 1;biomes.Add(new ForestBiome(x,y));}
 			}
 		}
 		return biomes;
@@ -281,36 +281,61 @@ public class Map : MonoBehaviour {
 		unit.restoreMove();
 
 	}
-	
-	private GameOptions findOptionsPartTwo(int x, int y, int move, GameOptions options){ //highlights all tiles that the unit can move to.
-		if (options.get (x,y) != null && options.get (x,y) > move){
-			return options;
+	/*
+	private void findOptionsPartTwo(int x, int y, int move, GameOptions options,int n){ //highlights all tiles that the unit can move to.
+		int max = 10;
+		print ("depth of : " + n);
+		//print (x + ", " + y);
+		//print (options.get (x,y));
+		if (options.get (x,y) != -1 && options.get (x,y) <= move){
+			print ("return point a: " + options.get (x,y));
+			return;
 		}
 		else {
 			options.set(x,y,move);
 		}
 		Tile tile = map[x,y];
-		
-		tile.highlight (new Color(.09f,.180f,.220f)); //highlight blue
-		highlighted.AddFirst(tile);
 
-		if (x-1 >= 0 && move - map[x-1,y].moveCost >= 0) //check that the next space is in the map and that it does not exceed movement cost.
-			{findOptionsPartTwo (x-1,y,move - map[x-1,y].moveCost, options);}
-		if (x+1 < WIDTH && move - map[x+1,y].moveCost >= 0)
-			{findOptionsPartTwo (x+1,y,move - map[x+1,y].moveCost, options);}
-		if (y-1 >= 0 && move - map[x,y-1].moveCost >= 0)
-			{findOptionsPartTwo (x,y-1,move - map[x,y-1].moveCost, options);}
-		if (y+1 < HEIGHT && move - map[x,y+1].moveCost >= 0)
-			{findOptionsPartTwo (x,y+1,move - map[x,y+1].moveCost, options);}
+		if (x-1 >= 0 && move + (int)TileCosts.Basic.costs[map[x-1,y].type] < max) //check that the next space is in the map and that it does not exceed movement cost.
+		{findOptionsPartTwo (x-1,y,move + (int)TileCosts.Basic.costs[map[x-1,y].type], options, n+1);} 
+		if (x+1 < WIDTH && move + (int)TileCosts.Basic.costs[map[x+1,y].type] < max)
+		{findOptionsPartTwo (x+1,y,move + (int)TileCosts.Basic.costs[map[x+1,y].type], options,n+1);}
+		if (y-1 >= 0 && move + (int)TileCosts.Basic.costs[map[x,y-1].type] < max)
+		{findOptionsPartTwo (x,y-1,move + (int)TileCosts.Basic.costs[map[x,y-1].type], options,n+1);}
+		if (y+1 < HEIGHT && move + (int)TileCosts.Basic.costs[map[x,y+1].type] < max)
+		{findOptionsPartTwo (x,y+1,move + (int)TileCosts.Basic.costs[map[x,y+1].type], options,n+1);}
 
-		return options;
+		return;
+	}
+*/
+	//method called by wrapper findOptions
+	private void fo(int x,int y,TileCosts costs, int distance, GameOptions explored){
+		int max = 50;
+		if (distance > max) return;
+		if (!onMap(x,y)) return;
+		if (explored.get (x,y) != -1){ //has been explored.
+			if (explored.get(x,y) > distance){
+				explored.set (x,y,distance);
+			}
+			else return;//there was a more efficient route
+		}
+		else{
+			explored.set(x,y,distance);
+		}
+		if (onMap(x+1,y))fo (x+1,y,costs,distance + (int)costs.costs[map[x+1,y].type],explored);
+		if (onMap(x-1,y))fo (x-1,y,costs,distance + (int)costs.costs[map[x-1,y].type],explored);
+		if (onMap(x,y+1))fo (x,y+1,costs,distance + (int)costs.costs[map[x,y+1].type],explored);
+		if (onMap(x,y-1))fo (x,y-1,costs,distance + (int)costs.costs[map[x,y-1].type],explored);
+		return;
 	}
 
 
 	public GameOptions findOptions(int x, int y, int move)
 	{
 		GameOptions options = new GameOptions();
-		return findOptionsPartTwo(x,y,move,options);
+		fo(x,y,TileCosts.Basic,0,options);
+		options.finalize();
+		return options;
 	}
 	//returns the distance to the tile
 	public int searchForTile(int x,int y,Tile tile, int mov, TileCosts costs){
