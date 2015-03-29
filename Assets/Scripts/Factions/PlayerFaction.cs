@@ -9,19 +9,24 @@
 //------------------------------------------------------------------------------
 using System;
 using UnityEngine;
+using System.Collections.Generic;
 
 namespace AssemblyCSharp
 {
 		public class PlayerFaction : Faction
 		{
-		Controller controller;
-				public PlayerFaction (Controller c) : base()
+		private Controller controller;
+
+				public PlayerFaction () : base()
 				{
-			controller = c;
+				spells = new List<Action>();
+				spells.Add(new Ping());
+				controller = Grid.controller;
 				}
 
 		public override void initiate(){
-			makeUnit(1,1);
+			makeUnit(10,10);
+			makeUnit (11,10);
 			//new WaitForSeconds(1);
 			foreach(Unit unit in units){
 				new PlusAttackSkill(unit,5);

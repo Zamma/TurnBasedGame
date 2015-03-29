@@ -23,7 +23,7 @@ public class GameState : MonoBehaviour {
 		currentAction = Grid.controller.currentAction;
 		map = Grid.map;
 		factions = new Faction[NUMFACTIONS];
-		factions[0] = new PlayerFaction(Grid.controller); //TODO make player faction not take an argument
+		factions[0] = new PlayerFaction();
 		factions[1] = new AIFaction();
 		TurnManager manager = Grid.turnManager;
 		manager.factions = factions;

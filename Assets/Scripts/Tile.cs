@@ -14,6 +14,7 @@ public class Tile : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+		controller = Grid.controller;
 		shade = Instantiate(Grid.prefabLoader.highlight,new Vector3(x,y,0),Quaternion.identity) as Highlight;
 		shade.transform.parent = transform;
 		highlight (Highlight.CLEAR);
@@ -104,6 +105,12 @@ public class Tile : MonoBehaviour {
 		moveCost = 10000;
 		type = "Water";
 		changeSprite ("water");
+	}
+
+	public void MakeHill(){
+		moveCost = 2;
+		type = "Hill";
+		changeSprite("hill");
 	}
 
 	public void MakeMountain(){

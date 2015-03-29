@@ -18,6 +18,7 @@ namespace AssemblyCSharp
 		public string name;
 		public List<Unit> units;
 		public Color color;
+		public List<Action> spells;
 
 				public Faction ()
 				{

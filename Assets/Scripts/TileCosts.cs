@@ -20,9 +20,11 @@ namespace AssemblyCSharp
 
 				static TileCosts(){
 					Flat = new TileCosts();
-					Flat.costs["Forest"] = 1;
+					Flat.costs["Grass"] = 1;
 					Flat.costs["Forest"] = 1;
 					Flat.costs["Water"] = 1;
+					Flat.costs["Mountain"] = 1;
+					Flat.costs["Hill"] = 1;
 				}
 
 				public TileCosts ()
@@ -30,8 +32,9 @@ namespace AssemblyCSharp
 					costs = new Hashtable();
 					costs.Add("Grass",1);
 					costs.Add("Forest",2);
+					costs.Add ("Hill",2);
 					costs.Add ("Water",10000);
-					//int test = (int) costs["Water"];
+					costs.Add("Mountain",5000);
 				}
 
 		public void change(string type,int cost){

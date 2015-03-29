@@ -9,44 +9,47 @@
 //------------------------------------------------------------------------------
 using System;
 using System.Collections.Generic;
+using AssemblyCSharp;
+
 namespace AssemblyCSharp
 {
-		public class NormalAttack : Action
+		public class Ping : Action
 		{
-		public int minRnge = 1;
-		public int maxRnge = 1;
-				public NormalAttack (Unit u)
+				public Ping ()
 				{
-					type = "Attack";
-					unit = u;
+			type = "Ping";
 				}
 
 		public override void display(){ //shows selectable tiles
-			List<Tile> tiles = Grid.map.getTilesInRange(unit.tile.x,unit.tile.y,TileCosts.Flat,minRnge,maxRnge);
-			foreach (Tile tile in tiles){
-				tile.highlight(Highlight.ATTACKHIGHLIGHT);
+			List<Tile> tiles = Grid.map.getAllVisibleTiles();
+			foreach(Tile tile in tiles){
+				tile.highlight(Highlight.SPELLHIGHLIGHT);
 			}
 		}
 		public override void activate(Tile tile){ //does the action
-			if (tile.hasUnit() && !tile.unit.faction.Equals(unit.faction)) Controller.battle (unit,tile.unit);
-			else return;
-			unit.mov = 0;
-			if (unit.faction.Equals(Grid.turnManager.factions[0])){ //if it was the player's unit.
-				unit.deleteActionsMenu();
-				unit.refreshVision();
+			Faction player = Grid.turnManager.active;
+			if (tile.hasUnit() && !tile.unit.faction.Equals(player)){
+				tile.unit.takeRawDamage(1);
+				foreach(Tile shaded in Grid.map.getAllVisibleTiles()){
+					shaded.highlight(Highlight.CLEAR);
+				}
 				Grid.controller.endAction("finish");
 			}
+			else return;
 		}
 		public override void clickedTile(Tile tile){	//input from user
-			Grid.controller.endAction("cancel");
+			foreach(Tile shaded in Grid.map.getAllVisibleTiles()){
+				shaded.highlight(Highlight.CLEAR);
+			}
+			Grid.controller.endAction("cancel Spell");
 		}
 		public override void rightClickedTile(Tile tile){ //input from user
-			if(Grid.map.getTilesInRange(unit.tile.x,unit.tile.y,TileCosts.Flat,minRnge,maxRnge).Contains (tile)){
+			if(Grid.map.getAllVisibleTiles().Contains (tile)){
 				activate(tile);
 			}
 		}
 		public override float evaluate(){ //for AI use
-			return 10f;
+			return 0f;
 		}
 		}
 }

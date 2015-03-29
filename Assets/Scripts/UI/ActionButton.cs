@@ -6,10 +6,6 @@ using AssemblyCSharp;
 public class ActionButton : MonoBehaviour {
 	public Action action;
 
-	//void Start(){
-		//GetComponent<Text>().text = "hello";
-	//}
-
 	public void setAction(Action a){
 		action = a;
 

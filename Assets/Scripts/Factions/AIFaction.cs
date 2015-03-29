@@ -27,7 +27,8 @@ namespace AssemblyCSharp
 			public override void initiate(){
 				makeUnit(0,0);
 				makeUnit(Map.HEIGHT-1,Map.HEIGHT -1);
-				makeUnit (10,10);
+				makeUnit (Map.HEIGHT-1,0);
+				makeUnit (0,Map.HEIGHT-1);
 				playerStart = Grid.map.map[Map.WIDTH/2,Map.WIDTH/2];
 			Grid.map.makeAllFog();
 			}

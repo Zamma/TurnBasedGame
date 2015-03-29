@@ -7,12 +7,16 @@ public class TurnManager : MonoBehaviour {
 	public int turnNumber;
 	public Faction[] factions;
 	public Faction active;
+	public Faction player;
 	// Use this for initialization
 	void Start () {
 		int turnNumber = 0;
 		GameState state = Grid.gameState; //hopefull gamestate and turnMangager initialize in the right order.
-		factions = state.factions;
+		//factions = state.factions;
+		//factions[0] = new PlayerFaction(); //TODO make the factions not be initialized by the GameState class
+		//sfactions[1] = new AIFaction();
 		active = factions[0];
+		player = factions[0];
 	}
 
 	public void startFactions(){
@@ -24,7 +28,7 @@ public class TurnManager : MonoBehaviour {
 
 	void Update() {
 		if (Input.GetKeyDown("return")){
-			print("pressed enter");
+			print("next Turn");
 			nextTurn();
 		}
 	}

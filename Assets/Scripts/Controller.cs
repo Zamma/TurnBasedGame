@@ -89,6 +89,9 @@ public class Controller : MonoBehaviour {
 			selectedUnit.makeActionsMenu();
 			currentAction.set("movedUnit");
 		}
+		else if(condition.Equals("cancel Spell")){
+			currentAction.set ("neutral");
+		}
 		else if (condition.Equals("finish")){
 			print ("finished");
 			currentAction.set ("neutral");
@@ -172,6 +175,11 @@ public class Controller : MonoBehaviour {
 
 	private void deselectUnit() //deselect any selected units.
 	{
+		if (selectedUnit == null){
+			currentAction.set ("neutral");
+			return;
+		}
+
 		if (returnTile != null) {
 			map.deselect(returnTile.x,returnTile.y,selectedUnit.maxMov,selectedUnit.moveCosts);
 		}
