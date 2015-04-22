@@ -5,6 +5,7 @@ using AssemblyCSharp;
 
 public class Unit : MonoBehaviour {
 	public int maxHp,hp,skl,def,atk,dge,lvl,exp,maxMov,mov,vis,minRnge,maxRnge;
+	public string type = "basic";
 	public Faction faction;
 	public Tile tile;
 	public Controller controller;
@@ -13,10 +14,10 @@ public class Unit : MonoBehaviour {
 	public List<Action> actions = new List<Action>();
 	private List<Skill> skills = new List<Skill>();
 	private GUIlist activeMenu;
-
-
+	
 	// Use this for initialization
 	void Start() {
+
 		//these are all 0 by default.
 		maxHp += 10;
 		hp += 10;
@@ -60,7 +61,12 @@ public class Unit : MonoBehaviour {
 	/***********************************UI************************************************************/
 	//set up the action menu. This will need to be fleshed out more once special actions are added.
 	public void makeActionsMenu(){
-		activeMenu = Instantiate(Grid.prefabLoader.guiList,new Vector3(tile.x + .6f,tile.y + .3f,0),Quaternion.identity) as GUIlist;
+		float scale = Grid.map.transform.localScale.x;
+		//activeMenu = Instantiate(Grid.prefabLoader.guiList,new Vector3((tile.x + .6f)*scale,(tile.y*scale + .3f)*scale,0),Quaternion.identity) as GUIlist;
+		activeMenu = Instantiate(Grid.prefabLoader.guiList,new Vector3(tile.x,tile.y,0),Quaternion.identity) as GUIlist;
+		activeMenu.transform.SetParent(Grid.map.transform);
+		activeMenu.transform.position = transform.position;
+		activeMenu.transform.position += new Vector3(.3f,.6f,0f);
 		//ActionPanel panel = activeMenu.GetComponentInChildren<ActionPanel>();
 		//panel.controller = controller;
 		//panel.unit = this.GetComponent<Unit>();

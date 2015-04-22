@@ -11,24 +11,30 @@ using System;
 using UnityEngine;
 namespace AssemblyCSharp
 {
-		abstract public class Action
+		public abstract class Phase : Action
 		{
-		public string type;
-		public Unit unit;
-				public Action ()
+
+				public bool activated; //has this phase been used this age
+				public Phase ()
 				{
-					
+					activated = false;
 				}
 
-		public void start(){
-			Grid.controller.startingAction(this);
-		}
 
-		public abstract void display(); //shows selectable tiles
-		public abstract void activate(Tile tile); //does the action
-		public abstract void clickedTile(Tile tile);	//input from user
-		public abstract void rightClickedTile(Tile tile); //input from user
-		public abstract float evaluate(); //for AI use
+		public override void clickedTile (Tile tile){
+			
+		}
+		
+		public override void rightClickedTile (Tile tile){
+			
+		}
+		
+		public override float evaluate (){
+			return 0f;
+		}
+		//public abstract void activate();
+				//public abstract void display();
+				
 		}
 }
 

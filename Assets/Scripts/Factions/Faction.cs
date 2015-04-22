@@ -16,14 +16,16 @@ namespace AssemblyCSharp
 		abstract public class Faction
 		{
 		public string name;
-		public List<Unit> units;
 		public Color color;
+		public List<Unit> units;
+		public List<BuildingEffect> buildings;
 		public List<Action> spells;
 
 				public Faction ()
 				{
-			units = new List<Unit>();
-			color = Highlight.WHITE;
+					units = new List<Unit>();
+					buildings = new List<BuildingEffect>();
+					color = Highlight.WHITE;
 				}
 
 		public abstract void initiate();
@@ -37,6 +39,7 @@ namespace AssemblyCSharp
 		public void addUnit(Unit unit){
 			unit.setFaction(this);
 			units.Add(unit);
+			MonoBehaviour.print ("number of units is: " + units.Count);
 		}
 
 		public void removeUnit(Unit unit){
@@ -47,12 +50,17 @@ namespace AssemblyCSharp
 			Tile tile = Grid.map.map[x,y];
 			//UnityEngine.GameObject objectUnit = Instantiate(Loader.aStaticPrefab,new Vector3(x,y,0),Quaternion.identity); //object to convert from later.
 			//GameObject unit = objectUnit as GameObject;
-			Unit newUnit = MonoBehaviour.Instantiate(Grid.prefabLoader.baseUnit,new Vector3(x,y,0),Quaternion.identity) as Unit;//objectUnit as Unit; //reminder that the start function in unit is called after this function ends.
+			Unit newUnit = MonoBehaviour.Instantiate(Grid.prefabLoader.baseUnit,new Vector3(x,y,-.1f),Quaternion.identity) as Unit;//objectUnit as Unit; //reminder that the start function in unit is called after this function ends.
 			addUnit(newUnit);
 			tile.unit = newUnit;
 			newUnit.setTile(tile);
-
+			newUnit.transform.SetParent(Grid.map.transform);
 			return newUnit;
+		}
+
+		public BuildingEffect makeBuilding(BuildingEffect building){
+			buildings.Add(building);
+			return building;
 		}
 
 		public void restoreMove(){

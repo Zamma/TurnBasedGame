@@ -16,26 +16,58 @@ namespace AssemblyCSharp
 		public class PlayerFaction : Faction
 		{
 		private Controller controller;
-
+		public int gold,science,iron,light,dark;
+		public int baseGold,baseScience,baseIron,baseLight,baseDark;
+		public List<Phase> phases;
+		public Phase phase;
+		public SkillPhase skillPhase = new SkillPhase();
+		public List<BuildingEffect> discoveredBuildings;
 				public PlayerFaction () : base()
 				{
-				spells = new List<Action>();
-				spells.Add(new Ping());
-				controller = Grid.controller;
+					spells = new List<Action>();
+					spells.Add(new Ping());
+					controller = Grid.controller;
+					phases = new List<Phase>();
+					skillPhase = new SkillPhase();
+					phases.Add(skillPhase);//may need to make an attribute to keep track of the skill phase so it can show what skill you will get.
+					phases.Add (new BuildPhase());
+					discoveredBuildings = new List<BuildingEffect>();
+			//phases.Add(new SkillPhase());
 				}
 
 		public override void initiate(){
 			makeUnit(Map.WIDTH/2,Map.HEIGHT/2);
 			makeUnit (Map.WIDTH/2 + 1,Map.HEIGHT/2);
 
+			makeBuilding(new Citadel(Map.WIDTH/2,Map.HEIGHT/2));
+
+			baseGold = 3;
+			gold = baseGold;
+			baseScience = 1;
+			science = baseScience;
+			baseIron = 0;
+			iron = baseIron;
+			baseLight = 0;
+			light = baseLight;
+			baseDark = 0;
+			dark = baseDark;
+
+			initiateDiscoveredBuildings();
+
 			foreach(Unit unit in units){
-				new PlusAttackSkill(unit,5);
-				new FirstStrike(unit);
+				//new PlusAttackSkill(unit,5);
+				//new FirstStrike(unit);
 			}
+		}
+
+		private void initiateDiscoveredBuildings(){
+			discoveredBuildings.Add(new Market());
+
 		}
 
 		public override void startTurn(){
 			refreshAllVision();
+			skillPhase.activate(null);
 			//controller.enabled = true;
 		}
 
@@ -54,6 +86,16 @@ namespace AssemblyCSharp
 			foreach(Unit unit in units){
 				unit.refreshVision();
 			}
+		}
+
+		public string getInfo(string request){
+			if (request.Equals("gold")) return gold + "/" + baseGold;
+			if (request.Equals("science")) return science + "/" + baseScience;
+			if (request.Equals("iron")) return iron + "/" + baseIron;
+			if (request.Equals("light")) return light + "/" + baseLight;
+			if (request.Equals("dark")) return dark + "/" + baseDark;
+
+			return "";
 		}
 
 

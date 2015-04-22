@@ -15,13 +15,14 @@ namespace AssemblyCSharp
 {
 		public class AIFaction : Faction
 		{
-			public static float POSITIONWEIGHT = 1f;
+			public static float POSITIONWEIGHT = 1f; //How much the AI values options
 			public static float ATTACKWEIGHT = 100f;
+			public int power = 2;
 			public static Tile playerStart;
 			private GameOptions distanceToPlayer;
 				public AIFaction ()
 				{
-			color = Highlight.ENEMY;	
+					color = Highlight.ENEMY;	
 				}
 
 
@@ -32,9 +33,12 @@ namespace AssemblyCSharp
 				//makeUnit (0,Map.HEIGHT-1);
 				playerStart = Grid.map.map[Map.WIDTH/2,Map.WIDTH/2];
 				distanceToPlayer = Grid.map.findOptions(playerStart.x,playerStart.y,0);
-			distanceToPlayer.printMap();
+				//distanceToPlayer.printMap();
 				foreach (Tile tile in distanceToPlayer.furthestTiles){
-					makeUnit(tile.x,tile.y);
+					makeBuilding(new AIBaseBuilding(tile.x,tile.y,this));
+					//BuildingEffect.activateWith(buildings,"MakeUnit","basic");
+				break;
+				//makeUnit(tile.x,tile.y);
 				}
 				Grid.map.makeAllFog();
 			}
@@ -45,11 +49,20 @@ namespace AssemblyCSharp
 					doBestOption(unit);
 				}
 			checkIntegrity();
+			makeUnits(power);
 			Grid.turnManager.nextTurn();
 			}
 
 			public override void endTurn(){
 				restoreMove();
+			}
+
+			private void makeUnits(int pow){
+			//currently just makes a bunch of basic units.
+			//this will be more involved once more unit types are added.
+			for (int i = 0; i<=pow;i++){
+				BuildingEffect.activateWith(buildings,"MakeUnit","basic");
+			}
 			}
 
 			public void doBestOption(Unit unit){

@@ -249,35 +249,56 @@ public class Map : MonoBehaviour {
 		return false;
 	}
 
-	public Tile moveUnit(Unit unit, int x, int y){//, GameOptions options){
+	public Tile moveUnit(Unit unit, int x, int y){
 
-		int origX = (int)unit.transform.position.x; //original position.
-		int origY = (int)unit.transform.position.y;
+		int origX = (int)unit.tile.x; //original position.
+		int origY = (int)unit.tile.y;
 
-		unit.mov = searchForTileInRange(unit.tile.x,unit.tile.y,map[x,y],unit.mov,unit.moveCosts);//options.get(x,y); //reduces the units movement
+		//float scale = transform.localScale.x; //x scale should always be equal to y
+
+		unit.mov = searchForTileInRange(unit.tile.x,unit.tile.y,map[x,y],unit.mov,unit.moveCosts); //reduces the units movement
 		
-		map[origX,origY].unit = null; //remove the unit from the old tile.
-		map[x,y].unit = unit; //and put him on the other tile.
+		//map[origX,origY].unit = null; //remove the unit from the old tile.
+		//map[x,y].unit = unit; //and put him on the other tile.
 
-		unit.setTile(map[x,y]);
+		//unit.setTile(map[x,y]);
+		//print ("running move Unit. Heading to: " + x + ", " + y+". was on: " + origX + ", "+origY + "scale is: "+scale);
+		//unit.transform.position = new Vector3((float) x * scale, (float) y*scale, 0f);
+		//unit.transform.SetParent(Grid.map.transform);
+		//unit.transform.position += new Vector3((x-origX)*scale,(y-origY)*scale,0f);
 
-		unit.transform.position = new Vector3((float) x, (float) y, 0f);
+		unitToTile (unit,map[x,y]);
 
 		return map[origX,origY]; //returns the tile so it can be returned to if the move is reversed.
 	}
 
+	//just moves the unit to a tile. does not adjust the movement.
+	private void unitToTile(Unit unit, Tile tile){
+		int origX = (int)unit.tile.x; //original position.
+		int origY = (int)unit.tile.y;
+
+		float scale = transform.localScale.x; //x scale should always be equal to y
+
+		map[origX,origY].unit = null; //remove the unit from the old tile.
+		map[tile.x,tile.y].unit = unit; //and put him on the other tile.
+
+		unit.setTile(map[tile.x,tile.y]); //updates unit info.
+
+		unit.transform.position += new Vector3((tile.x-origX)*scale,(tile.y-origY)*scale,0f);
+	}
+
 	public void revertUnitToTile(Tile tile, Unit unit) //returns a unit to a tile.
 	{
-		int x = (int) unit.transform.position.x;
-		int y = (int) unit.transform.position.y;
+		//int x = (int) unit.tile.x;
+		//int y = (int) unit.tile.y;
 
-		map[x,y].unit = null; //remove the unit from the old tile.
-		tile.unit = unit; //and put him on the other tile.
+		//map[x,y].unit = null; //remove the unit from the old tile.
+		//tile.unit = unit; //and put him on the other tile.
 
-		unit.setTile(tile); //tell the unit its new position.
+		//unit.setTile(tile); //tell the unit its new position.
 
-		unit.transform.position = new Vector3((float) tile.x, (float) tile.y, 0f);
-
+		//unit.transform.position = new Vector3((float) tile.x, (float) tile.y, 0f);
+		unitToTile (unit,tile);
 		unit.restoreMove();
 
 	}
@@ -496,6 +517,17 @@ public class Map : MonoBehaviour {
 			}
 		}
 		return visible;
+	}
+
+	public List<Tile> getAdjacent(Tile tile){
+		List<Tile> tiles = new List<Tile>();
+		int x = tile.x;
+		int y = tile.y;
+		tiles.Add(map[x+1,y]);
+		tiles.Add(map[x-1,y]);
+		tiles.Add(map[x,y+1]);
+		tiles.Add(map[x,y-1]);
+		return tiles;
 	}
 
 	//makes all tiles fogged

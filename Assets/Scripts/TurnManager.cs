@@ -7,7 +7,7 @@ public class TurnManager : MonoBehaviour {
 	public int turnNumber;
 	public Faction[] factions;
 	public Faction active;
-	public Faction player;
+	public PlayerFaction player;
 	// Use this for initialization
 	void Start () {
 		int turnNumber = 0;
@@ -16,7 +16,7 @@ public class TurnManager : MonoBehaviour {
 		//factions[0] = new PlayerFaction(); //TODO make the factions not be initialized by the GameState class
 		//sfactions[1] = new AIFaction();
 		active = factions[0];
-		player = factions[0];
+		player = (PlayerFaction)factions[0];
 	}
 
 	public void startFactions(){

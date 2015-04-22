@@ -11,24 +11,24 @@ using System;
 using UnityEngine;
 namespace AssemblyCSharp
 {
-		abstract public class Action
+		public class Citadel : BuildingEffect
 		{
-		public string type;
-		public Unit unit;
-				public Action ()
+				public Citadel (int x ,int y) : base(x,y)
 				{
+					activates.Add("MakeUnit");
+				}
+
+				public override void activate(string activator){
 					
 				}
 
-		public void start(){
-			Grid.controller.startingAction(this);
-		}
+				public override void onCreate(){
 
-		public abstract void display(); //shows selectable tiles
-		public abstract void activate(Tile tile); //does the action
-		public abstract void clickedTile(Tile tile);	//input from user
-		public abstract void rightClickedTile(Tile tile); //input from user
-		public abstract float evaluate(); //for AI use
+				}
+
+				public override void destroy(string condition){
+					MonoBehaviour.print ("game over"); //TODO make this more official.
+				}
 		}
 }
 

@@ -10,6 +10,7 @@ public class Tile : MonoBehaviour {
 	public bool visible = true;
 	public int height = 0;
 	public Unit unit;
+	public Building building;
 	public Controller controller;
 
 	// Use this for initialization

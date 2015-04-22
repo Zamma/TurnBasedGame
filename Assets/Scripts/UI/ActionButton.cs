@@ -14,6 +14,7 @@ public class ActionButton : MonoBehaviour {
 
 	public void clickedOn(){
 		Grid.controller.startingAction(action);
+		Destroy(transform.parent.gameObject);
 	}
 
 }

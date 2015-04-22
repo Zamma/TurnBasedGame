@@ -4,13 +4,9 @@ using System.Collections;
 //credit to forum.unity3d.com/threads/click-drag-camera-movement.39513/
 
 public class CameraDrag : MonoBehaviour {
-	public float dragSpeed = 1f;
+	public float dragSpeed = 5f;
 	public Vector3 dragOrigin;
-
-	void start(){
-		dragSpeed = 1;
-	}
-
+	
 	void Update () {
 		if (Input.GetMouseButtonDown(0)){
 			dragOrigin = Input.mousePosition;

@@ -10,4 +10,6 @@ public class PrefabLoader : MonoBehaviour {
 	public Highlight highlight;
 	public ActionButton actionButton;
 	public GUIlist guiList;
+	public Building building;
+	public skillOptionUI skillOptionUI;
 }
